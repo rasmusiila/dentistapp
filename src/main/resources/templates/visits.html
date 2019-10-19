@@ -1,0 +1,23 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head"></head>
+<body>
+<div th:replace="fragments/header :: header(visits)"></div>
+<div class="container">
+    <table class="table">
+        <thead>
+            <tr>
+                <th><p th:text="#{visit.date}"></p></th>
+                <th><p th:text="#{visit.time}"></p></th>
+                <th><p th:text="#{dentist.name}"></p></th>
+            </tr>
+        </thead>
+        <tr th:each="dentistVisit: ${dentistVisits}">
+            <td><p th:text="${#temporals.format(dentistVisit.visitDate, 'dd.MM.yyyy')}"></p></td>
+            <td><p th:text="${dentistVisit.visitTime}"></p></td>
+            <td><p th:text="${dentistVisit.dentist.name}"></p></td>
+        </tr>
+    </table>
+</div>
+<div th:replace="fragments/footer :: footer"></div>
+</body>
+</html>

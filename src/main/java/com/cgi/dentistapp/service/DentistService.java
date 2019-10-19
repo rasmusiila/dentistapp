@@ -4,10 +4,7 @@ import com.cgi.dentistapp.config.DentistConfig;
 import com.cgi.dentistapp.entity.DentistEntity;
 import com.cgi.dentistapp.repository.DentistRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ModelAttribute;
 
 import javax.transaction.Transactional;
 import java.util.List;

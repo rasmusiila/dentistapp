@@ -2,7 +2,6 @@ package com.cgi.dentistapp.validation;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class DentistVisitTimeValidator implements ConstraintValidator<DentistVisitTimeConstraint, LocalTime> {

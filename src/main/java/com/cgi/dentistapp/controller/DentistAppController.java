@@ -2,6 +2,7 @@ package com.cgi.dentistapp.controller;
 
 import com.cgi.dentistapp.dto.DentistVisitDTO;
 import com.cgi.dentistapp.entity.DentistEntity;
+import com.cgi.dentistapp.entity.DentistVisitEntity;
 import com.cgi.dentistapp.service.DentistService;
 import com.cgi.dentistapp.service.DentistVisitService;
 import org.slf4j.Logger;
@@ -34,6 +35,7 @@ public class DentistAppController extends WebMvcConfigurerAdapter {
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/results").setViewName("results");
+        registry.addViewController("/visits").setViewName("visits");
     }
 
     @GetMapping("/")
@@ -56,11 +58,21 @@ public class DentistAppController extends WebMvcConfigurerAdapter {
                 dentistVisitDTO.getVisitDate(), dentistVisitDTO.getVisitTime());
         // TODO: maybe it's possible to pass the dentist object to DTO in which case the extra query to find dentist by id won't be needed?
         System.out.println(dentistVisitService.getDentistVisits().size());
-        return "redirect:/results";
+        return "redirect:/visits";
+    }
+
+    @GetMapping("/visits")
+    public String showVisits() {
+        return "visits";
     }
 
     @ModelAttribute("dentists")
     public List<DentistEntity> dentists() {
         return dentistService.getDentists();
+    }
+
+    @ModelAttribute("dentistVisits")
+    public List<DentistVisitEntity> dentistVisits() {
+        return dentistVisitService.getDentistVisits();
     }
 }

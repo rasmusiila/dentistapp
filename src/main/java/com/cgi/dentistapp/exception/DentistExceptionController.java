@@ -1,6 +1,5 @@
 package com.cgi.dentistapp.exception;
 
-import org.hibernate.TransientPropertyValueException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
