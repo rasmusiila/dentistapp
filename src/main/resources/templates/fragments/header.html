@@ -4,8 +4,12 @@
     <nav class="navbar navbar-expand-sm navbar-light bg-light" th:fragment="header(activeTab)">
         <a class="navbar-brand" th:href="@{/}">DentistApp</a>
         <div class="navbar-nav">
-            <a class="nav-item nav-link" href="#" th:href="@{/}" th:classappend="${activeTab == 'form' ? 'active' : ''}">Book a visit</a>
-            <a class="nav-item nav-link" href="#" th:href="@{/visits}" th:classappend="${activeTab == 'visits' ? 'active' : ''}">Dentist visits</a>
+            <a class="nav-item nav-link" href="#" th:href="@{/}"
+               th:classappend="${activeTab == 'form' ? 'active' : ''}"
+               th:text="#{registration.link}"></a>
+            <a class="nav-item nav-link" href="#" th:href="@{/visits}"
+               th:classappend="${activeTab == 'visits' ? 'active' : ''}"
+               th:text="#{visits.link}"></a>
         </div>
     </nav>
 </body>
