@@ -54,7 +54,7 @@ public class DentistVisitEntityTests {
         entityManager.persist(dentist);
         entityManager.flush();
 
-        DentistVisitEntity dentistVisitEntity = new DentistVisitEntity(LocalDate.now(), LocalTime.NOON, dentist);
+        DentistVisitEntity dentistVisitEntity = new DentistVisitEntity(LocalDate.now().plusDays(1), LocalTime.NOON, dentist);
 
         entityManager.persist(dentistVisitEntity);
         entityManager.flush();

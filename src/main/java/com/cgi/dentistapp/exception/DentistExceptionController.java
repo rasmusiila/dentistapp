@@ -13,6 +13,7 @@ import javax.validation.ConstraintViolationException;
 public class DentistExceptionController {
     @ExceptionHandler(value = ConstraintViolationException.class)
     public ResponseEntity<Object> exception(ConstraintViolationException exception) {
+        System.out.println(exception);
         StringBuilder responseBody = new StringBuilder("Exception: ConstraintViolationException\n");
         exception.getConstraintViolations().forEach(
                 violation -> responseBody.append("\t").append(violation.getMessage()).append("\n")
@@ -40,6 +41,18 @@ public class DentistExceptionController {
     @ExceptionHandler(value = IllegalStateException.class)
     public ResponseEntity<Object> exception(IllegalStateException exception) {
         StringBuilder responseBody = new StringBuilder("Exception: IllegalStateException\n");
+        responseBody.append("\t").append(exception.getMessage()).append("\n");
+        // TODO: maybe you should make a dedicated html page for displaying these errors
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.TEXT_PLAIN);
+
+        return new ResponseEntity<>(responseBody, headers, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = DentistVisitExistsException.class)
+    public ResponseEntity<Object> exception(DentistVisitExistsException exception) {
+        StringBuilder responseBody = new StringBuilder("Exception: DentistVisitExistsException\n");
         responseBody.append("\t").append(exception.getMessage()).append("\n");
         // TODO: maybe you should make a dedicated html page for displaying these errors
 

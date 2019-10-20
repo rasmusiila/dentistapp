@@ -3,6 +3,7 @@ package com.cgi.dentistapp.controller;
 import com.cgi.dentistapp.dto.DentistVisitDTO;
 import com.cgi.dentistapp.entity.DentistEntity;
 import com.cgi.dentistapp.entity.DentistVisitEntity;
+import com.cgi.dentistapp.exception.DentistVisitExistsException;
 import com.cgi.dentistapp.service.DentistService;
 import com.cgi.dentistapp.service.DentistVisitService;
 import org.slf4j.Logger;
@@ -12,9 +13,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
@@ -34,6 +33,7 @@ public class DentistAppController extends WebMvcConfigurerAdapter {
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addViewController("/form").setViewName("form");
         registry.addViewController("/results").setViewName("results");
         registry.addViewController("/visits").setViewName("visits");
     }
@@ -49,21 +49,49 @@ public class DentistAppController extends WebMvcConfigurerAdapter {
     }
 
     @PostMapping("/")
-    public String postRegisterForm(@Valid DentistVisitDTO dentistVisitDTO, BindingResult bindingResult) {
+    public String postRegisterForm(@Valid DentistVisitDTO dentistVisitDTO, BindingResult bindingResult) throws DentistVisitExistsException {
         if (bindingResult.hasErrors()) {
+            System.out.println(bindingResult);
             return "form";
         }
-
         dentistVisitService.addDentistVisit(dentistService.getDentistById(dentistVisitDTO.getDentistId()),
                 dentistVisitDTO.getVisitDate(), dentistVisitDTO.getVisitTime());
         // TODO: maybe it's possible to pass the dentist object to DTO in which case the extra query to find dentist by id won't be needed?
-        System.out.println(dentistVisitService.getDentistVisits().size());
         return "redirect:/visits";
     }
 
     @GetMapping("/visits")
     public String showVisits() {
         return "visits";
+    }
+
+    @DeleteMapping("/{id}")
+    public String deleteVisit(@PathVariable("id") Long id) {
+        dentistVisitService.deleteDentistVisit(id);
+        return "redirect:/visits";
+    }
+
+    @GetMapping("/{id}")
+    public String showUpdateForm(@PathVariable("id") Long id, DentistVisitDTO dentistVisitDTO) {
+        DentistVisitEntity dentistVisitEntity = dentistVisitService.getDentistVisitById(id);
+        // TODO: this means another query to the database eventhough I have the full entity in the previous form, I feel like this could be solved better possibly with @RequestBody?
+        dentistVisitDTO.setId(dentistVisitEntity.getId());
+        dentistVisitDTO.setDentistId(dentistVisitEntity.getDentist().getId());
+        dentistVisitDTO.setVisitDate(dentistVisitEntity.getVisitDate());
+        dentistVisitDTO.setVisitTime(dentistVisitEntity.getVisitTime());
+
+        return "form";
+    }
+
+    @PutMapping("/")
+    public String updateVisit(@Valid DentistVisitDTO dentistVisitDTO, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "form";
+        }
+        dentistVisitService.updateDentistVisit(dentistVisitDTO.getId(),
+                dentistService.getDentistById(dentistVisitDTO.getDentistId()),
+                dentistVisitDTO.getVisitDate(), dentistVisitDTO.getVisitTime());
+        return "redirect:/visits";
     }
 
     @ModelAttribute("dentists")
@@ -75,4 +103,6 @@ public class DentistAppController extends WebMvcConfigurerAdapter {
     public List<DentistVisitEntity> dentistVisits() {
         return dentistVisitService.getDentistVisits();
     }
+
+    // TODO: check when exactly are the modelattribute queries done, maybe it would be efficient to call them only when needed
 }

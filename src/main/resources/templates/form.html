@@ -40,7 +40,8 @@
 <body>
 <div th:replace="fragments/header :: header(form)"></div>
 <div class="container">
-    <form action="#" th:action="@{/}" th:object="${dentistVisitDTO}" method="post">
+    <form action="#" th:action="@{/}" th:object="${dentistVisitDTO}" th:method="*{id == null} ? post : put">
+        <input hidden="hidden" id="dentistVisitId" th:field="*{id}"/>
         <table>
             <tr>
                 <td><p th:text="#{dentist.name}">dentist.name</p></td>
@@ -65,6 +66,11 @@
                 <td><p th:text="#{visit.time}">visit.time</p></td>
                 <td><input id="dentistTimePicker" type="text" autocomplete="off" th:field="*{visitTime}" readonly="readonly"/></td>
                 <td th:if="${#fields.hasErrors('visitTime')}" th:errors="*{visitTime}" style="color:red">time.error</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td th:if="${#fields.hasErrors('global')}" th:errors="*{global}" style="color:red">datetime.error</td>
             </tr>
             <tr>
                 <td>

@@ -1,7 +1,9 @@
 package com.cgi.dentistapp.entity;
 
 import com.cgi.dentistapp.validation.DentistVisitDateConstraint;
+import com.cgi.dentistapp.validation.DateTimeConstraint;
 import com.cgi.dentistapp.validation.DentistVisitTimeConstraint;
+import com.cgi.dentistapp.validation.OverlappingDateTimeConstraint;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -10,6 +12,7 @@ import java.time.LocalTime;
 
 @Entity
 @Table(name = "dentist_visit")
+@DateTimeConstraint
 public class DentistVisitEntity {
 
     @Id

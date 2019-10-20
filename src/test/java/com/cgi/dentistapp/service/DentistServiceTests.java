@@ -1,5 +1,6 @@
 package com.cgi.dentistapp.service;
 
+import com.cgi.dentistapp.config.DentistConfig;
 import com.cgi.dentistapp.entity.DentistEntity;
 import com.cgi.dentistapp.repository.DentistRepository;
 import org.junit.Assert;
@@ -32,6 +33,8 @@ public class DentistServiceTests {
 
     @MockBean
     private DentistRepository dentistRepository;
+    @MockBean
+    private DentistConfig dentistConfig;
 
     @Before
     public void setUp() {

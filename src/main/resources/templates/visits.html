@@ -5,16 +5,30 @@
 <div class="container">
     <table class="table">
         <thead>
-            <tr>
-                <th><p th:text="#{visit.date}"></p></th>
-                <th><p th:text="#{visit.time}"></p></th>
-                <th><p th:text="#{dentist.name}"></p></th>
-            </tr>
+        <tr>
+            <th><p th:text="#{visit.date}"></p></th>
+            <th><p th:text="#{visit.time}"></p></th>
+            <th><p th:text="#{dentist.name}"></p></th>
+            <th></th>
+            <th></th>
+        </tr>
         </thead>
         <tr th:each="dentistVisit: ${dentistVisits}">
             <td><p th:text="${#temporals.format(dentistVisit.visitDate, 'dd.MM.yyyy')}"></p></td>
             <td><p th:text="${dentistVisit.visitTime}"></p></td>
             <td><p th:text="${dentistVisit.dentist.name}"></p></td>
+            <td>
+                <form th:action="@{'/{id}'(id = ${dentistVisit.id})}" th:method="get">
+                    <button type="submit" value="Submit" class="btn btn-primary" th:text="#{visits.edit}"></button>
+                </form>
+            </td>
+            <td>
+                <!--                <a th:href="@{/visits/${dentistVisit.id}}" class="btn btn-danger">Delete</a>-->
+                <form th:action="@{'/{id}'(id = ${dentistVisit.id})}" th:method="delete">
+                    <button type="submit" value="Submit" class="btn btn-danger" th:text="#{visits.delete}"></button>
+                </form>
+            </td>
+            <!--            <td><button type="submit" class="btn btn-danger" th:action="@{/visits/${dentistVisit.id}}" th:method="delete" th:text="#{visits.delete}"></button></td>-->
         </tr>
     </table>
 </div>
