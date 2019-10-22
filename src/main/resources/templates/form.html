@@ -39,7 +39,7 @@
 </script>
 <body>
 <div th:replace="fragments/header :: header(form)"></div>
-<div class="container">
+<div id="content" class="container">
     <form action="#" th:action="@{/}" th:object="${dentistVisitDTO}" th:method="*{id == null} ? post : put">
         <input hidden="hidden" id="dentistVisitId" th:field="*{id}"/>
         <table>
@@ -48,7 +48,7 @@
                 <!--            <td><input type="text" th:field="*{dentistName}"/></td>-->
                 <td>
                     <label>
-                        <select id="dentistId" name="dentistId">
+                        <select id="dentistId" class="form-control" name="dentistId">
                             <option th:selected="(*{dentistId == null})" disabled="disabled" value="0">---</option>
                             <option th:each="dentist : ${dentists}" th:value="${dentist.id}"
                                     th:text="${dentist.name}" th:selected="(${dentist.id} == *{dentistId})"></option>
@@ -59,12 +59,12 @@
             </tr>
             <tr>
                 <td><p th:text="#{visit.date}">visit.date</p></td>
-                <td><input id="dentistDatePicker" type="text" autocomplete="off" th:field="*{visitDate}" readonly="readonly"/></td>
+                <td><input id="dentistDatePicker" class="form-control" type="text" autocomplete="off" th:field="*{visitDate}" readonly="readonly"/></td>
                 <td th:if="${#fields.hasErrors('visitDate')}" th:errors="*{visitDate}" style="color:red">date.error</td>
             </tr>
             <tr>
                 <td><p th:text="#{visit.time}">visit.time</p></td>
-                <td><input id="dentistTimePicker" type="text" autocomplete="off" th:field="*{visitTime}" readonly="readonly"/></td>
+                <td><input id="dentistTimePicker" class="form-control" type="text" autocomplete="off" th:field="*{visitTime}" readonly="readonly"/></td>
                 <td th:if="${#fields.hasErrors('visitTime')}" th:errors="*{visitTime}" style="color:red">time.error</td>
             </tr>
             <tr>
@@ -74,7 +74,7 @@
             </tr>
             <tr>
                 <td>
-                    <button type="submit" th:text="#{register.visit}"></button>
+                    <button type="submit" class="btn btn-primary" th:text="#{register.visit}"></button>
                 </td>
             </tr>
         </table>

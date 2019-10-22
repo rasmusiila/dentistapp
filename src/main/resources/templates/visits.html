@@ -1,22 +1,54 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/head :: head"></head>
+<script src="js/src/visits.js"></script>
 <body>
 <div th:replace="fragments/header :: header(visits)"></div>
-<div class="container">
-    <table class="table">
+<div id="content" class="container">
+    <a class="btn btn-primary" data-toggle="collapse" href="#filterContainer" th:text="#{visits.filter}"
+       role="button"></a>
+    <table id="filterContainer" class="table collapse">
+        <tr>
+            <td>
+                <label for="dentistFilter" th:text="#{dentist.name}">Dentist</label>
+                <div id="dentistFilter"></div>
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>
+                <label for="minDatePicker" th:text="#{visits.minDate}">Min Date</label>
+                <input id="minDatePicker" class="form-control" type="text" autocomplete="off" readonly="readonly"/>
+            </td>
+            <td>
+                <label for="minTimePicker" th:text="#{visits.minTime}">Min Time</label>
+                <input id="minTimePicker" class="form-control" type="text" autocomplete="off" readonly="readonly"/>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="maxDatePicker" th:text="#{visits.maxDate}">Max Date</label>
+                <input id="maxDatePicker" class="form-control" type="text" autocomplete="off" readonly="readonly"/>
+            </td>
+            <td>
+                <label for="maxTimePicker" th:text="#{visits.maxTime}">Max Time</label>
+                <input id="maxTimePicker" class="form-control" type="text" autocomplete="off" readonly="readonly"/>
+            </td>
+        </tr>
+    </table>
+    <table id="visitsTable" class="table">
         <thead>
         <tr>
-            <th><p th:text="#{visit.date}"></p></th>
-            <th><p th:text="#{visit.time}"></p></th>
-            <th><p th:text="#{dentist.name}"></p></th>
+            <th th:text="#{visit.date}"></th>
+            <th th:text="#{visit.time}"></th>
+            <th th:text="#{dentist.name}"></th>
             <th></th>
             <th></th>
         </tr>
         </thead>
         <tr th:each="dentistVisit: ${dentistVisits}">
-            <td><p th:text="${#temporals.format(dentistVisit.visitDate, 'dd.MM.yyyy')}"></p></td>
-            <td><p th:text="${dentistVisit.visitTime}"></p></td>
-            <td><p th:text="${dentistVisit.dentist.name}"></p></td>
+            <td th:text="${#temporals.format(dentistVisit.visitDate, 'dd.MM.yyyy')}"></td>
+            <td th:text="${dentistVisit.visitTime}"></td>
+            <td th:text="${dentistVisit.dentist.name}"></td>
             <td>
                 <form th:action="@{'/{id}'(id = ${dentistVisit.id})}" th:method="get">
                     <button type="submit" value="Submit" class="btn btn-primary" th:text="#{visits.edit}"></button>

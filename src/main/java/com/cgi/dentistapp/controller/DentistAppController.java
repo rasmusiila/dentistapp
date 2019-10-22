@@ -18,6 +18,8 @@ import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @Controller
@@ -44,6 +46,8 @@ public class DentistAppController extends WebMvcConfigurerAdapter {
         dentistService.addDentistsIfNone();
         // adding it to the modelattribute would be usually covered by the @ModelAttribute but since it's fired before we add fields to the database
         model.addAttribute("dentists", dentistService.getDentists());
+        // Adding some initial visits just to have a couple of entries
+        addDentistVisitsIfNone();
 
         return "form";
     }
@@ -104,5 +108,25 @@ public class DentistAppController extends WebMvcConfigurerAdapter {
         return dentistVisitService.getDentistVisits();
     }
 
-    // TODO: check when exactly are the modelattribute queries done, maybe it would be efficient to call them only when needed
+    private void addDentistVisitsIfNone() {
+        // THis method is just used to add some initial entries if there aren't any, since we're using an in-memory database
+        if (dentistVisitService.countDentistVisits() == 0) {
+            try {
+                dentistVisitService.addDentistVisit(dentistService.getDentistById((long) 1),
+                        LocalDate.now().plusDays(3), LocalTime.NOON);
+                dentistVisitService.addDentistVisit(dentistService.getDentistById((long) 2),
+                        LocalDate.now().plusDays(2), LocalTime.NOON);
+                dentistVisitService.addDentistVisit(dentistService.getDentistById((long) 1),
+                        LocalDate.now().plusDays(4), LocalTime.NOON);
+                dentistVisitService.addDentistVisit(dentistService.getDentistById((long) 4),
+                        LocalDate.now().plusDays(1), LocalTime.NOON);
+                dentistVisitService.addDentistVisit(dentistService.getDentistById((long) 2),
+                        LocalDate.now().plusDays(2), LocalTime.of(9, 0));
+                dentistVisitService.addDentistVisit(dentistService.getDentistById((long) 1),
+                        LocalDate.now().plusDays(2), LocalTime.of(14, 0));
+            } catch (DentistVisitExistsException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }

@@ -8,11 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -63,5 +60,10 @@ public class DentistVisitService {
             }
         }
         return false;
+    }
+
+
+    public long countDentistVisits() {
+        return dentistVisitRepository.count();
     }
 }
