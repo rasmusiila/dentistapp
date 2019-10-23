@@ -41,7 +41,6 @@ public class DentistVisitService {
     }
 
     public void updateDentistVisit(Long id, DentistEntity dentist, LocalDate visitDate, LocalTime visitTime) {
-        // TODO: maybe you should check if the entity exists in database before you update
         DentistVisitEntity dentistVisit = dentistVisitRepository.findOne(id);
         if (dentistVisit != null) {
             dentistVisit.setDentist(dentist);

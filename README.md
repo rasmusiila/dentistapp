@@ -72,3 +72,7 @@ The `validation` package contains the custom constraints and validators using th
 ### Resources
 
 The `resources` folder contains the static web content like `html` files, fragments, `javascript` files, `css` files and `.properties` files.
+
+### Testing
+
+Unittests for some of the classes were made but not all. 
