@@ -1,0 +1,127 @@
+16.10
+
+	12:49 - 17:00
+		- Downloaded the project and imported to IntelliJ
+		- Application started for the first time
+		- Exploring the source code
+		- Read documentation about Spring Boot on tutorialspoint
+	NOTE: might be useful to create a jar file out of the project later so it could be used to run the application on other computers without having to set up the workspace
+		- 1st assignment: make a dropdown list from which to choose a dentist - it's unclear if the dentists should have a table in the database or a simple list of names is enough but generally this data would come from a database, so a table for dentists will be made.
+		- Look up DTO and what it's used for.
+		- Research how to manage database operations in Spring Boot. In normal Spring you can do SQL statements.
+	
+	19:00 - 20:00
+		- 
+		
+17.10
+	12:00 - 16:00
+		- Adding the dentist to the database from a list - added this to application.properties, maybe it's a better idea to make a separate properties file for that?
+			- made a separate properties file for it dentists.properties
+			- problem with encoding, even after changing @PropertySource encoding to utf8
+				- one solution is to use unicode escapes in the properties file but I don't like having to do that, another option is to use an automated tool to do the conversion for you
+				- used unicode escape symbols for now - will come back to it later if there's time TODO
+		- Making Date and Time pickable
+			- Reading on good practices regarding date/time pickers
+				- Date picker window should be fine without letting the user type anything since a dentist's appointment is usually not that far in the future
+				- Disable past dates
+				- Maybe disable the future past a specific point aswell (half a year from now or something like that)
+			- JQuery's datepicker seems to be decent enough to do the job for picking the date - get the localization for estonian too
+			- The time picker should be separate from the date picker imo.
+			- For choosing an appointment time, there probably should be certain timeslots (every 30 minutes or every hour for example)
+			- Again Jquery's timepicker should be flexible enough to achieve what i want
+				- The time should have a min time and max time - this is not a 24/7 dentist
+		
+	19:37 - 20:40, 21:50 - 23:40
+		- Now that the form has changed slightly, the validation needs to be updated aswell
+		- Slight issue with getting the dropdown value to the DTO as Long
+		- Frontend validation should be ok now and the filled values should stay if something went wrong
+		- Currently the visit time is of Date datatype, maybe come back to this later? TODO
+		- Adding the visit to the database - do research what you're meant to do with the created DTO object to insert a visit to the database.
+		- Adding visits to database working.
+		- Disabled manual typing on the date and time fields
+		
+		- Server side validation - so basically i'm assuming what this is, is that if there was no front-end validation, the server side validation should still catch the errors and should probably output the errors in logging (?)
+		
+18.10
+	14:00 - 18:20
+		- Do research on how to deal with exceptions outside the controller (so for example i try to add a dentist with a null name into the database - this should not give the user a stracktrace)
+		- OK, figured out how to handle exceptions from tutorialspoint - also saw that it's possible to add a message for every single constraint that might fail
+		- Adding a dedicated error page to display all the possible exceptions - come back to this later TODO
+		- Also these errors might need to be logged so the developers can see what went wrong TODO
+		- Should change Date to LocalDate - changing it was surprisingly easy
+		- Create custom constraint validators for visitDate and visitTime - this actually needs to happen in two places - the DTO object and when saving to Database
+			- For the DTO object the custom constraint validator should be the correct thing but for database... maybe I need to create some conditionals?
+			- The reason I'm doing is is to validate past and too far in the future dates insertion
+			- Tried the custom constraint validator, and it works for both front-end and back-end - neat
+			- Do the same thing for visitTime - Done
+		
+		- With that Etapp 1. should be done - this seems the perfect place to make some unittests aswell.
+	
+	20:30 - 23:40
+		- Tests
+		
+19.10
+	16:00 - 21:00
+		- Some more tests - Taking too long for now, will return to this later if there's time TODO
+		- Starting Etapp 2.
+			- I've already created the service to get all dentistVisits - now I just need to add a GetMapping in the controller and create a new html view.
+			- Do research on how to do headers/footers etc. in Thymeleaf
+			- Also doing some simple styling with bootstrap, navbar and footer added
+			- Oh, I just realised I've mixed estonian and english in the app - changed the english menu names to estonian using the properties file
+		- Etapp 2 done
+
+20.10
+	14:00 - 17:00 19:00 - 22:30
+		- Starting Etapp 3.
+			- Delete visits functionality - add a service, a controller mapping and a button - done
+			- Edit visits functionality - service, controller mapping, button
+				- Should this be a separate view perhaps? 
+				- Struggling with routing slightly - I want to reuse the existing form view for updating a visit
+				- Edit functionality works but still a small issue with routing (specifically finding local css files and js files after ' return "form" ') - ok fixed but i'm not quite sure why exactly it wasn't working
+			- Functionality for disallowing overlapping visits
+				- Do research, maybe you could do a constraintvalidator on two fields? - Yes, there's a thing called a Class-level constraint which I can use
+					- I might also be able to use the same thing on my date and time selection when the user tries to choose a date and time that has already passed on the current day
+					- Displaying a class-level constraint error in Thymeleaf is different - solved it
+				- For overlapping datetimes i could create a class-level constraint and inject the service in it which will check if the specific combination of date and time exists
+					- Currently there's some duplication of code, DentistVisitEntity had DentistVisitDTO both have their own constraintvalidators - maybe you can doe something later TODO
+				- Issue with autowiring - DTO validator gets a service wired correctly but the Entity validator does not
+					- Ok did some research and it's not possible to autowire things in Entities - so maybe try to apply the constraint in the repository instead?
+					- Did the validation programmatically in the service layer instead - I'm not sure if it's the best way to solve it
+		- With that Etapp 3. should be complete, check the existing tests aswell and correct them if necessary
+		
+21.10
+	16:00 - 18:30 20:30 - 23:50
+		- Etapp 4. - the search feature - for my implementation I think it makes more sense to call it the filter feature 
+			- Do research on how to make the filter (likely there's an existing javascript library you can use), ideally you wouldn't have to refresh the page
+			- Filter by dentist name
+				- Select from a dropdown or type in a name? - maybe select from dropdown but with the possiblity of multiple choices
+			- Filter by date
+				- Start date and end date
+			- Filter by time
+				- Start time and end time
+			- It also makes sense to have default ordering to it too - should be ordered based on date and time, earliest first
+				- Thymeleaf itself doesn't have sorting
+				- But bootstrap does
+				- Bootstrap tables multiple sort was not working - Changed to Datatables instead
+		- Had a frustrating issue with the footer not sticking to the bottom of the page - And of course the main cause of that problem was that the css was not updating and Ctrl + F5 saves the day
+		- Name filtering works singularly; date and time filtering does not work yet, will do that tommorrow
+		
+22.10
+	14:00 - 17:00  17:30 - 19:30
+		- Continue doing the filtering
+		- Date sorting works now - the user can choose min date and max date
+		- Time sorting issue - for some reason the 'change' event doesn't get fired like it does on the datepickers
+			- Ok the JQuery timepicker needs to have a change method specified in its constructor
+		- Now time sorting works aswell
+		- Style the filtering boxes - add labels etc. 
+		- Finished etapp 4. There's also talk of a detail-view of the visits but it doesn't really add anything to my current application 
+		- Tommorrow I will focus on possible cleanup, documentation and some sort of a guide on how to run it
+		
+23.10
+	14:00 - 17:40
+		- Documentation
+			- Overview of the UI - made a PDF document since I wanted to show screenshots
+			- Documentation of the project (folder structure, classes, how they interact with each other etc.) - put that in the README
+			- Add this log to the project aswell.
+		- See if there's any cleanup you want to do.
+		

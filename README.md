@@ -9,13 +9,17 @@ For building and running the application you need:
 - JDK 1.8
 - Maven 3
 
-## Quick Start Guide
+## Setup Guide
 
-This section guides you how to quickly start the application without having to set the project up in your environment.
+The easiest way to set up the project is to use IntelliJ IDEA.  
+Note: You need to be connected to the internet for this.
 
-## Full setup guide
-
-This section guides you how to set the project up in your environment.
+- Create a new project using version control.
+- Set the address to this git repository: https://github.com/rasmusiila/dentistapp.git
+- IntelliJ will ask (if not configured to be automatic) to download Maven dependencies - agree
+- Build project (Ctrl+F9)
+- Navigate to `src/main/java/com.cgi.dentistapp` and Run `DentistAppApplication`
+- If successful, open a web browser, and navigate to `localhost:8080`
 
 ## Project Structure
 
